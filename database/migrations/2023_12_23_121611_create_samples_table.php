@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('samples', function (Blueprint $table) {
-            $table->uuid()->primary();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->boolean('result')->nullable();
             $table->string('chart_standard_url');
             $table->string('chart_bvs_url');
-            $table->bigIncrements('rate_1');
-            $table->bigIncrements('rate_2');
-            $table->bigIncrements('rate_3');
-            $table->bigIncrements('rate_4');
-            $table->bigIncrements('rate_5');
+            $table->bigInteger('rate_1');
+            $table->bigInteger('rate_2');
+            $table->bigInteger('rate_3');
+            $table->bigInteger('rate_4');
+            $table->bigInteger('rate_5');
             $table->json('data');
             $table->boolean('deep_analitics')->default(false);
             $table->timestamps();

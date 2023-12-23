@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
 class ProcessSamplesController extends Controller
 {
@@ -41,11 +42,13 @@ class ProcessSamplesController extends Controller
                 Storage::disk('public')->put($fileBvsName, $graphBvsImage);
 
                 $sample = Sample::create([
+                    'id' => Uuid::uuid4()->toString(),
                     'sample_id' => $sample['id'],
-                    'data' => $row,
+                    'name' => $sample['name'],
+                    'data' => $data,
                     'result' => $result,
-                    'graph_standard' => $fileName,
-                    'graph_bvs' => $fileBvsName,
+                    'chart_standard_url' => $fileName,
+                    'chart_bvs_url' => $fileBvsName,
                     'rate_1' => $data[0],
                     'rate_2' => $data[1],
                     'rate_3' => $data[2],

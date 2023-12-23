@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DeepAnalitycsController;
 use App\Http\Controllers\GraphBvsController;
 use App\Http\Controllers\GraphController;
 use App\Http\Controllers\ProcessSamplesController;
@@ -26,3 +27,4 @@ Route::get('samples', SamplesController::class);
 Route::post('process', ProcessSamplesController::class);
 Route::post('graph', GraphController::class);
 Route::post('graph-bvs', GraphBvsController::class);
+Route::post('deep_analitics', DeepAnalitycsController::class);
