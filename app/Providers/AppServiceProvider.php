@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Services\SampleProcessor;
+use App\Services\SampleProcessorService;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Pennant\Feature;
 
@@ -22,5 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Feature::define('new-view', fn (?User $user) => true);
+
+        $this->app->bind(SampleProcessor::class, SampleProcessorService::class);
     }
 }
