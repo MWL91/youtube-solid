@@ -14,6 +14,7 @@ class ProcessSamplesTest extends TestCase
     {
         $response = $this->post('api/process');
 
+        dd($response);
         $response->assertOk();
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Entities\SampleEntry;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
 class ExternalGraphGenerator implements SamplesGraph
 {
@@ -14,10 +16,12 @@ class ExternalGraphGenerator implements SamplesGraph
      * @param int|string $rowKey
      * @return string
      */
-    public function getBvsGraph(array $sampleEntry, $name, int|string $rowKey): string
+    public function getBvsGraph(SampleEntry $sample): string
     {
+        $sampleEntry = $sample->getValues();
+        $name = $sample->getName();
         $graphBvsImage = Http::post(config('api.lab_url') . '/graph-bvs', $sampleEntry)->body();
-        $fileBvsName = $name . '-' . $rowKey . '-bvs.png';
+        $fileBvsName = $name . '-' . uniqid() . '-bvs.png';
         Storage::disk('public')->put($fileBvsName, $graphBvsImage);
         return $fileBvsName;
     }
@@ -28,10 +32,12 @@ class ExternalGraphGenerator implements SamplesGraph
      * @param int|string $rowKey
      * @return string
      */
-    public function getGraph(array $sampleEntry, $name, int|string $rowKey): string
+    public function getGraph(SampleEntry $sample): string
     {
+        $sampleEntry = $sample->getValues();
+        $name = $sample->getName();
         $graphImage = Http::post(config('api.lab_url') . '/graph', $sampleEntry)->body();
-        $fileName = $name . '-' . $rowKey . '-standard.png';
+        $fileName = $name . '-' . uniqid() . '-standard.png';
         Storage::disk('public')->put($fileName, $graphImage);
         return $fileName;
     }

@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Entities\SampleEntry;
+
 interface SamplesGraph
 {
-    public function getBvsGraph(array $sampleEntry, string $name, int $rowKey): string;
-    public function getGraph(array $sampleEntry, string $name, int $rowKey): string;
+    public function getBvsGraph(SampleEntry $sample): string;
+    public function getGraph(SampleEntry $sample): string;
 }

@@ -12,7 +12,7 @@ class DeepAnalitycsController extends Controller
     public function __invoke(Request $request)
     {
         // mock here, but consuming data for 10s...
-        sleep(10);
+//        sleep(10);
 
         return response()->json([
             'success' => true

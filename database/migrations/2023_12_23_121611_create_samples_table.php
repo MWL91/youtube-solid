@@ -23,7 +23,7 @@ return new class extends Migration
             $table->bigInteger('rate_4');
             $table->bigInteger('rate_5');
             $table->json('data');
-            $table->boolean('deep_analitics')->default(false);
+            $table->boolean('deep_analytics')->default(false);
             $table->timestamps();
         });
     }

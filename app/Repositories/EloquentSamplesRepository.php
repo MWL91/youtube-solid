@@ -2,36 +2,34 @@
 
 namespace App\Repositories;
 
+use App\Entities\SampleEntry;
 use App\Models\Sample;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class EloquentSamplesRepository implements SamplesRepository
 {
 
-    /**
-     * @param mixed $sample
-     * @param array $sampleEntry
-     * @param bool $result
-     * @param string $fileName
-     * @param string $fileBvsName
-     * @return mixed
-     */
-    public function createSample(mixed $sample, array $sampleEntry, bool $result, string $fileName, string $fileBvsName)
+    public function createSample(SampleEntry $sample): void
     {
-        $sample = Sample::create([
-            'id' => Uuid::uuid4()->toString(),
-            'sample_id' => $sample['id'],
-            'name' => $sample['name'],
-            'data' => $sampleEntry,
-            'result' => $result,
-            'chart_standard_url' => $fileName,
-            'chart_bvs_url' => $fileBvsName,
-            'rate_1' => $sampleEntry[0],
-            'rate_2' => $sampleEntry[1],
-            'rate_3' => $sampleEntry[2],
-            'rate_4' => $sampleEntry[3],
-            'rate_5' => $sampleEntry[4],
+        Sample::create([
+            'id' => $sample->getStorageId()->toString(),
+            'sample_id' => $sample->getId(),
+            'name' => $sample->getName(),
+            'data' => $sample->getValues(),
+            'result' => $sample->getResult(),
+            'chart_standard_url' => $sample->getGraphFileName(),
+            'chart_bvs_url' => $sample->getGraphBvsFileName(),
+            'rate_1' => $sample->getAlphaScore(),
+            'rate_2' => $sample->getBetaScore(),
+            'rate_3' => $sample->getGammaScore(),
+            'rate_4' => $sample->getDeltaScore(),
+            'rate_5' => $sample->getEpsilonScore(),
         ]);
-        return $sample;
+    }
+
+    public function setDeepAnalytics(\Ramsey\Uuid\UuidInterface $id, bool $valid): void
+    {
+        Sample::where('id', $id->toString())->update(['deep_analytics' => $valid]);
     }
 }

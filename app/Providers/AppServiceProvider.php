@@ -9,6 +9,9 @@ use App\Services\DeepAnalyticsProcessor;
 use App\Services\DeepAnalyticsService;
 use App\Services\ExternalGraphGenerator;
 use App\Services\GetResultService;
+use App\Services\SampleFileProcessor;
+use App\Services\SampleFileService;
+use App\Services\SamplePipelineService;
 use App\Services\SampleProcessor;
 use App\Services\SampleProcessorService;
 use App\Services\SampleResult;
@@ -33,10 +36,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Feature::define('new-view', fn (?User $user) => true);
 
-        $this->app->bind(SampleProcessor::class, SampleProcessorService::class);
+        $this->app->bind(SampleProcessor::class, SamplePipelineService::class);
         $this->app->bind(DeepAnalyticsProcessor::class, DeepAnalyticsService::class);
         $this->app->bind(SamplesRepository::class, EloquentSamplesRepository::class);
         $this->app->bind(SamplesGraph::class, ExternalGraphGenerator::class);
         $this->app->bind(SampleResult::class, GetResultService::class);
+        $this->app->bind(SampleFileProcessor::class, SampleFileService::class);
     }
 }
