@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\Sample;
 use Tests\TestCase;
 
 class ProcessSamplesTest extends TestCase
@@ -14,7 +15,15 @@ class ProcessSamplesTest extends TestCase
     {
         $response = $this->post('api/process');
 
-        dd($response);
         $response->assertOk();
+        $this->assertDatabaseHas('samples', [
+            'name' => 'Sample 1',
+            'rate_1' => 26,
+            'rate_2' => 79,
+            'rate_3' => 44,
+            'rate_4' => 31,
+            'rate_5' => 1,
+            'deep_analytics' => true,
+        ]);
     }
 }
