@@ -3,9 +3,10 @@
 namespace App\Pipelines\Filters;
 
 use App\Entities\SampleEntry;
+use App\Pipelines\LaravelQueueFilter;
 use App\Services\DeepAnalyticsProcessor;
 
-class DeepAnalyze
+class DeepAnalyze extends LaravelQueueFilter
 {
     public function __construct(private readonly DeepAnalyticsProcessor $deepAnalyticsService)
     {

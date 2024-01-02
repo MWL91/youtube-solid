@@ -3,10 +3,11 @@
 namespace App\Pipelines\Filters;
 
 use App\Entities\SampleEntry;
+use App\Pipelines\LaravelQueueFilter;
 use App\Repositories\SamplesRepository;
 use Ramsey\Uuid\UuidInterface;
 
-class StoreSample
+class StoreSample extends LaravelQueueFilter
 {
     public function __construct(
         private readonly UuidInterface $id,

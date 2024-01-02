@@ -3,17 +3,18 @@
 namespace App\Pipelines;
 
 use App\Entities\SampleEntry;
+use App\Models\PipelineProgress;
+use App\Pipelines\Filters\RemoveLaravelQueuePipelineProgress;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Bus;
+use Ramsey\Uuid\Uuid;
 
-class LaravelQueuePipeline implements ShouldQueue
+class LaravelQueuePipeline
 {
-    use Dispatchable, InteractsWithQueue, Queueable;
-
     private array $stages = [
     ];
     private SampleEntry $payload;
@@ -23,35 +24,21 @@ class LaravelQueuePipeline implements ShouldQueue
         $this->stages = $stages;
     }
 
-    public function pipe(callable $stage): self
+    public function pipe(ShouldQueue $stage): self
     {
         $this->stages[] = ($stage);
         return $this;
     }
 
-    public function process(mixed $payload): void
+    public function process(Arrayable $payload): void
     {
-        $this->payload = ($payload);
-        $this->dispatch();
-    }
+        $processId = Uuid::uuid4();
+        PipelineProgress::create([
+            'id' => $processId,
+            'payload' => $payload
+        ]);
 
-    public function handle(): void
-    {
-        if($this->stages === []) {
-            return;
-        }
-
-        $stage = array_shift($this->stages);
-        $stage($this->payload);
-
-        $this->dispatch();
-    }
-
-    /**
-     * @return void
-     */
-    private function dispatch(): void
-    {
-        app(Dispatcher::class)->dispatch($this);
+        array_map(fn (PipeShouldQueue $stage) => $stage->setProcessId($processId), $this->stages);
+        Bus::chain($this->stages)->dispatch();
     }
 }

@@ -3,8 +3,9 @@
 namespace App\Pipelines\Filters;
 
 use App\Entities\SampleEntry;
+use App\Pipelines\LaravelQueueFilter;
 
-class DiscoverResult
+class DiscoverResult extends LaravelQueueFilter
 {
     public function __invoke(SampleEntry $sample): SampleEntry
     {

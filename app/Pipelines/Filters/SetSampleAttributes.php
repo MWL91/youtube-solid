@@ -3,8 +3,9 @@
 namespace App\Pipelines\Filters;
 
 use App\Entities\SampleEntry;
+use App\Pipelines\LaravelQueueFilter;
 
-class SetSampleAttributes
+class SetSampleAttributes extends LaravelQueueFilter
 {
     public function __construct(private string $rawData, private string $name, private string $id)
     {

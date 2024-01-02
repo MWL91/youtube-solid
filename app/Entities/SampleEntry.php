@@ -2,7 +2,9 @@
 
 namespace App\Entities;
 
-class SampleEntry
+use Illuminate\Contracts\Support\Arrayable;
+
+class SampleEntry implements Arrayable
 {
     private string $name;
     private array $values;
@@ -14,6 +16,41 @@ class SampleEntry
 
     public function __construct()
     {
+    }
+
+    public static function fromArray($payload): self
+    {
+        $sample = new self();
+
+        if(isset($payload['name'])) {
+            $sample->setName($payload['name']);
+        }
+
+        if(isset($payload['values'])) {
+            $sample->setValues($payload['values']);
+        }
+
+        if(isset($payload['result'])) {
+            $sample->setResult($payload['result']);
+        }
+
+        if(isset($payload['graphFileName'])) {
+            $sample->setGraphFileName($payload['graphFileName']);
+        }
+
+        if(isset($payload['graphBvsFileName'])) {
+            $sample->setGraphBvsFileName($payload['graphBvsFileName']);
+        }
+
+        if(isset($payload['sampleId'])) {
+            $sample->setId($payload['sampleId']);
+        }
+
+        if(isset($payload['storageId'])) {
+            $sample->setStorageId($payload['storageId']);
+        }
+
+        return $sample;
     }
 
     public function getAlphaScore(): int
@@ -109,5 +146,18 @@ class SampleEntry
     public function getStorageId(): \Ramsey\Uuid\UuidInterface
     {
         return $this->storageId;
+    }
+
+    public function toArray()
+    {
+        return [
+            'name' => $this->name,
+            'values' => $this->values,
+            'result' => $this->result,
+            'graphFileName' => $this->graphFileName,
+            'graphBvsFileName' => $this->graphBvsFileName,
+            'sampleId' => $this->sampleId,
+            'storageId' => $this->storageId,
+        ];
     }
 }

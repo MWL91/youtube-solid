@@ -3,9 +3,10 @@
 namespace App\Pipelines\Filters;
 
 use App\Entities\SampleEntry;
+use App\Pipelines\LaravelQueueFilter;
 use App\Services\SamplesGraph;
 
-class GenerateGraph
+class GenerateGraph extends LaravelQueueFilter
 {
     public function __construct(private readonly SamplesGraph $samplesGraphGenerator)
     {
