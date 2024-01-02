@@ -17,7 +17,7 @@ class SyncPipeline
         return $this;
     }
 
-    public function process($payload)
+    public function process(mixed $payload): mixed
     {
         foreach ($this->stages as $stage) {
             $payload = $stage($payload);
