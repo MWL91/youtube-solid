@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entities\SampleEntry;
 use App\Models\Sample;
+use App\Pipelines\LaravelQueuePipeline;
 use App\Pipelines\Filters\DeepAnalyze;
 use App\Pipelines\Filters\DiscoverResult;
 use App\Pipelines\Filters\GenerateBvsGraph;
@@ -34,7 +35,7 @@ class SamplePipelineService implements SampleProcessor
             $rows = $this->sampleFileService->readSampleFile($sampleRow['file']);
 
             foreach($rows as $row) {
-                (new SyncPipeline())
+                (new LaravelQueuePipeline())
                     ->pipe(new SetSampleAttributes($row, $sampleRow['name'], $sampleRow['id']))
                     ->pipe(new DiscoverResult())
                     ->pipe(new GenerateGraph($this->samplesGraphGenerator))

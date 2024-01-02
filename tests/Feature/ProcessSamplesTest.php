@@ -13,8 +13,9 @@ class ProcessSamplesTest extends TestCase
      */
     public function test_process_samples(): void
     {
-        $response = $this->post('api/process');
+        $response = $this->json('post','api/process');
 
+        dd($response);
         $response->assertOk();
         $this->assertDatabaseHas('samples', [
             'name' => 'Sample 1',
