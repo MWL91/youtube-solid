@@ -18,15 +18,16 @@ class LaravelQueuePipeline implements ShouldQueue
     ];
     private SampleEntry $payload;
 
-    public function __construct(callable ...$stages)
+    public function __construct()
     {
-        $this->stages = $stages;
     }
 
     public function pipe(callable $stage): self
     {
-        $this->stages[] = ($stage);
-        return $this;
+        $pipeline = clone $this;
+        $pipeline->stages[] = ($stage::class);
+
+        return $pipeline;
     }
 
     public function process(mixed $payload): void
@@ -41,7 +42,8 @@ class LaravelQueuePipeline implements ShouldQueue
             return;
         }
 
-        $stage = array_shift($this->stages);
+        $payload = ['1', 'b', 'd'];
+        $stage = new (array_shift($this->stages))(...$payload);
         $stage($this->payload);
 
         $this->dispatch();
@@ -52,6 +54,8 @@ class LaravelQueuePipeline implements ShouldQueue
      */
     private function dispatch(): void
     {
+//        dump('!');
+//        dump([$this, serialize($this)]);
         app(Dispatcher::class)->dispatch($this);
     }
 }
